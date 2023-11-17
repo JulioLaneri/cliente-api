@@ -1,7 +1,7 @@
 
 <template>
   <div class="contenedor-login">
-    <h2>Iniciar Sesión</h2>
+    <h1>Iniciar Sesión</h1>
     <form @submit.prevent="login">
       <label for="email">Correo electrónico:</label>
       <input type="text" v-model="email" required />
