@@ -16,6 +16,7 @@
 
 <script>
 import axios from 'axios';
+import router from '@/router';
 
 
 export default {
@@ -26,19 +27,20 @@ export default {
     };
   },
   methods: {
-    async login() {
-      try {
-        const response = await axios.post('http://localhost:8081/auth/login', {
-          email: this.email,
-          password: this.password,
-        });
-
-        localStorage.setItem('user', JSON.stringify(response.data));
-      } catch (error) {
-        console.error('Error al iniciar sesión:', error.message);
-      }
-    },
+  async login() {
+    try {
+      const response = await axios.post('http://localhost:8081/auth/login', {
+        email: this.email,
+        password: this.password,
+      });
+      sessionStorage.setItem('user', JSON.stringify(response.data));
+      console.log("SE INICIÓ SESIÓN");
+      router.replace('/clientes');
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error.message);
+    }
   },
+},
 };
 </script>
 
