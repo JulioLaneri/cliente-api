@@ -1,5 +1,6 @@
 <template>
   <div>
+    <HomePage/>
     <h1>Lista de Clientes</h1>
     <table>
       <thead>
@@ -23,26 +24,30 @@
 </template>
 
 <script>
+import HomePage from './HomePage.vue';
+
 export default {
-  data() {
-    return {
-      clientes: [],
-    };
-  },
-  mounted() {
-    this.obtenerClientes();
-  },
-  methods: {
-    async obtenerClientes() {
-      try {
-        const response = await fetch('http://localhost:8081/clientes/page/0');
-        const data = await response.json();
-        this.clientes = data;
-      } catch (error) {
-        console.error('Error al obtener los datos de los clientes:', error);
-      }
+    data() {
+        return {
+            clientes: [],
+        };
     },
-  },
+    mounted() {
+        this.obtenerClientes();
+    },
+    methods: {
+        async obtenerClientes() {
+            try {
+                const response = await fetch('http://localhost:8081/clientes/page/0');
+                const data = await response.json();
+                this.clientes = data;
+            }
+            catch (error) {
+                console.error('Error al obtener los datos de los clientes:', error);
+            }
+        },
+    },
+    components: { HomePage }
 };
 </script>
 

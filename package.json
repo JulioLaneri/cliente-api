@@ -8,10 +8,14 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@quasar/extras": "^1.16.8",
     "axios": "^1.6.2",
+    "bootstrap": "^5.3.2",
     "core-js": "^3.8.3",
     "element-plus": "^2.4.2",
-    "vue": "^3.2.13",
+    "quasar": "^2.14.0",
+    "sweetalert2": "^11.10.1",
+    "vue": "^3.3.8",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {

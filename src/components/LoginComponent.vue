@@ -29,13 +29,14 @@ export default {
   methods: {
   async login() {
     try {
-      const response = await axios.post('http://localhost:8081/auth/login', {
+      const response = await axios.post('http://localhost:8085/auth/login', {
         email: this.email,
         password: this.password,
       });
       sessionStorage.setItem('user', JSON.stringify(response.data));
       console.log("SE INICIÓ SESIÓN");
-      router.replace('/clientes');
+      router.replace("/home");
+
     } catch (error) {
       console.error('Error al iniciar sesión:', error.message);
     }
