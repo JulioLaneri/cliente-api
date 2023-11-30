@@ -9,6 +9,9 @@ import AgregarEmpleado from './Empleados/AgregarEmpleado.vue';
 import ReportesView from './Reportes/ReportesView.vue';
 import FacturacionView from './Facturacion/FacturacionView.vue';
 import HistorialFacturacion from './Facturacion/HistorialFacturacion.vue';
+import NotFound from'./components/NotFound.vue';
+import ServerError from'./components/ServerError.vue';
+import ErrorGeneral from'./components/ErrorGeneral.vue';
 const routes = [
    { path: '/', redirect: '/login' },
    { path: '/login', component: LoginComponent },
@@ -21,6 +24,9 @@ const routes = [
    { path: '/reportes', component: ReportesView },
    { path: '/facturacion', component: FacturacionView },
    { path: '/historial', component: HistorialFacturacion },
+   { path: '/error-404', component: NotFound },
+   { path: '/error-500', component: ServerError },
+   { path: '/error', component: ErrorGeneral },
   ];
   
   const router = createRouter({
