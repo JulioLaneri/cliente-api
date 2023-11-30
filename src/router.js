@@ -12,7 +12,7 @@ import NotFound from './components/NotFound.vue'
 import ServerError from './components/ServerError.vue'
 import ErrorGeneral from './components/ErrorGeneral.vue'
 const routes = [
-   { path: '/', redirect: '/error' },
+   { path: '/', redirect: '/login' },
    { path: '/login', component: LoginComponent },
    { path: '/clientes', component: ListaClientes },
    { path: '/home', component: HomePage },
