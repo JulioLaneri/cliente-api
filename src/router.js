@@ -8,8 +8,11 @@ import ListaEmpleados from './Empleados/ListaEmpleados.vue';
 import AgregarEmpleado from './Empleados/AgregarEmpleado.vue';
 import ReportesView from './Reportes/ReportesView.vue';
 import FacturacionView from './Facturacion/FacturacionView.vue';
+import NotFound from './components/NotFound.vue'
+import ServerError from './components/ServerError.vue'
+import ErrorGeneral from './components/ErrorGeneral.vue'
 const routes = [
-   { path: '/', redirect: '/login' },
+   { path: '/', redirect: '/error' },
    { path: '/login', component: LoginComponent },
    { path: '/clientes', component: ListaClientes },
    { path: '/home', component: HomePage },
@@ -19,6 +22,9 @@ const routes = [
    { path: '/clientes', component: EditarCliente },
    { path: '/reportes', component: ReportesView },
    { path: '/facturacion', component: FacturacionView },
+   { path: '/error-404', component: NotFound },
+   { path: '/error-500', component: ServerError },
+   { path: '/error', component: ErrorGeneral },
   ];
   
   const router = createRouter({
