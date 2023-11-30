@@ -8,6 +8,7 @@ import ListaEmpleados from './Empleados/ListaEmpleados.vue';
 import AgregarEmpleado from './Empleados/AgregarEmpleado.vue';
 import ReportesView from './Reportes/ReportesView.vue';
 import FacturacionView from './Facturacion/FacturacionView.vue';
+import HistorialFacturacion from './Facturacion/HistorialFacturacion.vue';
 const routes = [
    { path: '/', redirect: '/login' },
    { path: '/login', component: LoginComponent },
@@ -19,6 +20,7 @@ const routes = [
    { path: '/clientes', component: EditarCliente },
    { path: '/reportes', component: ReportesView },
    { path: '/facturacion', component: FacturacionView },
+   { path: '/historial', component: HistorialFacturacion },
   ];
   
   const router = createRouter({
