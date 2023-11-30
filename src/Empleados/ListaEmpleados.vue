@@ -3,7 +3,7 @@
         <HomePage />
 
 
-        <button @click="mostrarModalAgregar = true" type="button" class="btn btn-primary float-end">
+        <button @click="mostrarModalAgregar = true" type="button" class="btn btn-outline-primary float-end">
             Agregar Empleado
         </button>
         <!-- Modal Agregar -->
@@ -21,6 +21,7 @@
                     <i class="fas fa-search"></i>
                 </span>
             </div>
+
         </div>
         <table>
             <thead>
@@ -43,10 +44,10 @@
                     <td>
                         {{ empleado.telefono }}
                         <button type="button" @click="confirmarEliminar(empleado)"
-                            class="btn btn-danger float-end">Eliminar</button>
+                            class="btn btn-outline-danger float-end">Eliminar</button>
 
                         <button @click="mostrarModalEditar = true; empleadoSeleccionado = empleado"
-                            class="btn btn-warning float-end">Editar</button>
+                            class="btn btn-outline-warning float-end">Editar</button>
                         <!-- Modal Editar -->
                         <div v-if="mostrarModalEditar" class="modal">
                             <EditarEmpleado :mostrar="mostrarModalEditar" :empleadoEditar="empleadoSeleccionado"
@@ -59,6 +60,28 @@
 
             </tbody>
         </table>
+        <!-- Botones de paginación -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li class="page-item" :class="{ disabled: currentPage === 1 }">
+                    <button class="page-link" @click="currentPage > 1 ? currentPage-- : null" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </button>
+                </li>
+
+                <li class="page-item" v-for="page in Math.ceil(totalItems / pageSize)" :key="page"
+                    :class="{ active: page === currentPage }">
+                    <button class="page-link" @click="currentPage = page">{{ page }}</button>
+                </li>
+
+                <li class="page-item" :class="{ disabled: currentPage === Math.ceil(totalItems / pageSize) }">
+                    <button class="page-link" @click="currentPage < Math.ceil(totalItems / pageSize) ? currentPage++ : null"
+                        aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </button>
+                </li>
+            </ul>
+        </nav>
     </div>
 </template>
   
@@ -83,14 +106,24 @@ export default {
             mostrarModalEditar: false,
             empleadoSeleccionado: null,
             searchTerm: '',
+            cargando: false,
+            currentPage: 1,
+            pageSize: 5,
+            totalItems: 0,
         };
     },
+    watch: {
+        currentPage: 'obtenerEmpleados',
+        
+    },
+
     methods: {
         async obtenerEmpleados() {
             try {
                 this.cargando = true;
-                const response = await axios.get('http://localhost:8085/empleados/page/0');
+                const response = await axios.get(`http://localhost:8085/empleados/page/${this.currentPage - 1}?size=${this.pageSize}`);
                 this.empleados = response.data.content;
+                this.totalItems = response.data.totalElements;
                 this.cargando = false;
                 // Nuevo: Filtrar empleados según el término de búsqueda
                 this.filteredEmpleados = this.empleados.filter(empleado =>
@@ -101,6 +134,7 @@ export default {
                 this.cargando = false;
             }
         },
+
 
         async confirmarEliminar(empleado) {
             const { isConfirmed } = await Swal.fire({
@@ -190,26 +224,30 @@ th {
   
 <style scoped>
 /* Estilos para los botones de Acciones */
-.btn-warning {
+.btn-outline-warning {
     margin-right: 30px;
 }
 
-.btn-primary{
+.btn-outline-primary {
     margin-top: 30px;
 }
-.btn-danger {
+
+.btn-outline-danger {
     margin-right: 0px;
 }
-h2{
+
+h2 {
     margin-left: 10rem;
 }
+
 i {
-  
- 
-  color: #495057;
-  font-size: 25px;
-  cursor: pointer;
+
+
+    color: #495057;
+    font-size: 25px;
+    cursor: pointer;
 }
+
 input {
     background-color: transparent;
     border: none;

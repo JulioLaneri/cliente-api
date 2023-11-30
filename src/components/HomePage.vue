@@ -21,6 +21,9 @@
           <li class="nav-item px-lg-5">
             <router-link to="/reportes" class="nav-link">Reportes</router-link>
           </li>
+          <li class="nav-item px-lg-5">
+            <router-link to="/facturacion" class="nav-link">Facturacion</router-link>
+          </li>
         </ul>
         
       </div>

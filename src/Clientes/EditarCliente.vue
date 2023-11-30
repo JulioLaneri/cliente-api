@@ -1,12 +1,12 @@
 <template>
-    <div class="modal-background">
-      <div class="modal-container">
-        <div class="modal-content">
-  
-          <h2 class="mb-4">Editar Cliente</h2>
-  
-          <form @submit.prevent="editarCliente">
-            <div class="mb-3" >
+  <div class="modal-background">
+    <div class="modal-container">
+      <div class="modal-content">
+
+        <h2 class="mb-4">Editar Cliente</h2>
+
+        <form @submit.prevent="editarCliente">
+          <div class="mb-3">
             <label for="nombre" class="form-label">Nombre:</label>
             <input type="text" v-model="nombre" class="form-control" />
           </div>
@@ -18,7 +18,7 @@
 
           <div class="mb-3">
             <label for="email" class="form-label">Email:</label>
-            <input type="email" v-model="email" class="form-control" />
+            <input type="email" v-model="correoElectronico" class="form-control" />
           </div>
 
           <div class="mb-3">
@@ -26,16 +26,8 @@
             <input type="text" v-model="telefono" class="form-control" />
           </div>
 
-          
 
-          <div class="mb-3">
-            <label for="deporte" class="form-label">Deporte:</label>
-            <select v-model="deporte" class="form-select">
-              <option value="futbol">Fútbol</option>
-              <option value="tenis">Tenis</option>
-              <option value="padel">Padel</option>
-            </select>
-          </div>
+
 
 
           <button type="submit" class="btn btn-primary">Actualizar</button>
@@ -44,12 +36,12 @@
           </button>
 
         </form>
-        </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
   
-  <script>
+<script>
 import axios from 'axios';
 
 export default {
@@ -68,9 +60,9 @@ export default {
       // Inicializamos los datos del formulario en el gancho watch
       nombre: '',
       cedula: '',
-      email: '',
+      correoElectronico: '',
       telefono: '',
-      deporte: 'futbol',
+
     };
   },
   watch: {
@@ -79,29 +71,29 @@ export default {
       immediate: true, // Para ejecutar la función watch inmediatamente
       handler(cliente) {
         console.log('cliente en watch:', cliente);
-        this.nombre = cliente.nombre || '';
-        this.cedula = cliente.cedula || '';
-        this.email = cliente.email || '';
-        this.telefono = cliente.telefono || '';
-        
-        this.deporte = cliente.deporte || 'futbol';
+        if (cliente) {
+          this.nombre = cliente.nombre || '';
+          this.cedula = cliente.cedula || '';
+          this.correoElectronico = cliente.correoElectronico || '';
+          this.telefono = cliente.telefono || '';
+        }
       },
+
     },
   },
   methods: {
     async editarCliente() {
-        
+
       try {
         console.log('Datos a enviar para editar:');
-        const response = await axios.put(`http://localhost:8085/clientes/${this.clienteEditar.clienteId}`, {
+        const response = await axios.put(`http://localhost:8081/clientes/${this.clienteEditar.clienteId}`, {
           nombre: this.nombre,
           cedula: this.cedula,
-          email: this.email,
+          correoElectronico: this.correoElectronico,
           telefono: this.telefono,
-          
-          deporteid: this.deporte,
+
         });
-        
+
         console.log('cliente editado:', response.data);
         this.cerrarModal(); // Cierra el modal al guardar correctamente
       } catch (error) {
@@ -115,8 +107,8 @@ export default {
 };
 </script>
 
-  <style scoped>
-  .modal-background {
+<style scoped>
+.modal-background {
   position: fixed;
   top: 0;
   left: 0;
@@ -155,11 +147,12 @@ export default {
   color: #333;
   /* Color del botón de cierre */
 }
+
 .form-label {
   margin-right: 20rem;
   margin-bottom: 0.5rem;
   display: inline-block;
- 
-  
+
+
 }
-  </style>
+</style>

@@ -34,17 +34,18 @@
             <tbody>
 
 
-                <tr v-for="cliente in filteredClientes" :key="cliente.clienteId">
+                <tr v-for="cliente in filteredClientes" :key="cliente.clienteID">
                     <td>{{ cliente.nombre }}</td>
                     <td>{{ cliente.cedula }}</td>
-                    <td>{{ cliente.email }}</td>
+                    <td>{{ cliente.correoElectronico }}</td>
 
                     <td>
                         {{ cliente.telefono }}
                         <button type="button" @click="confirmarEliminar(cliente)"
                             class="btn btn-danger float-end">Eliminar</button>
 
-                            <button @click="mostrarModalEditar = true; clienteSeleccionado = cliente" class="btn btn-warning float-end">Editar</button>
+                        <button @click="mostrarModalEditar = true; clienteSeleccionado = cliente"
+                            class="btn btn-warning float-end">Editar</button>
 
                         <!-- Modal Editar -->
                         <div v-if="mostrarModalEditar" class="modal">
@@ -86,24 +87,22 @@ export default {
             mostrarModalEditar: false,
             clienteSeleccionado: null,
             searchTerm: '',
+            cargando: false, // Agregado
         };
     },
     methods: {
         async obtenerClientes() {
             try {
                 this.cargando = true;
-                const response = await axios.get('http://localhost:8085/clientes/page/0');
-                this.clientes = response.data.content;
-                this.cargando = false;
-                // Nuevo: Filtrar clientes según el término de búsqueda
-                this.filteredClientes = this.clientes.filter(cliente =>
-                    cliente.nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
-                );
+                const response = await axios.get('http://localhost:8081/clientes/page/0');
+                this.clientes = response.data;
             } catch (error) {
                 console.error('Error al obtener los datos de los clientes:', error);
+            } finally {
                 this.cargando = false;
             }
         },
+
 
         async confirmarEliminar(cliente) {
             const { isConfirmed } = await Swal.fire({
@@ -124,7 +123,7 @@ export default {
 
         async eliminarCliente(cliente) {
             try {
-                const response = await axios.delete(`http://localhost:8085/clientes/${cliente.clienteID}`);
+                const response = await axios.delete(`http://localhost:8081/clientes/${cliente.clienteId}`);
                 console.log('cliente eliminado:', response.data);
                 this.obtenerClientes();  // Actualizar la lista de clientes después de eliminar
                 this.cerrarModal();
@@ -154,13 +153,17 @@ export default {
     computed: {
         //  propiedad computada para los clientes filtrados
         filteredClientes() {
-            return this.clientes.filter(cliente =>
-                cliente.nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
-            );
+            if (this.clientes) {
+                return this.clientes.filter(cliente =>
+                    cliente.nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
+                );
+            } else {
+                return [];
+            }
         },
-    },
 
-};
+    },
+}
 </script>
   
 <style scoped>
@@ -197,22 +200,26 @@ th {
     margin-right: 30px;
 }
 
-.btn-primary{
+.btn-primary {
     margin-top: 30px;
 }
+
 .btn-danger {
     margin-right: 0px;
 }
-h2{
+
+h2 {
     margin-left: 10rem;
 }
+
 i {
-  
- 
-  color: #495057;
-  font-size: 25px;
-  cursor: pointer;
+
+
+    color: #495057;
+    font-size: 25px;
+    cursor: pointer;
 }
+
 input {
     background-color: transparent;
     border: none;

@@ -79,13 +79,15 @@ export default {
       immediate: true, // Para ejecutar la función watch inmediatamente
       handler(empleado) {
         console.log('Empleado en watch:', empleado);
+        if (empleado) {
         this.nombre = empleado.nombre || '';
         this.cedula = empleado.cedula || '';
         this.email = empleado.email || '';
         this.telefono = empleado.telefono || '';
         
         this.deporte = empleado.deporte || 'futbol';
-      },
+      }
+    },
     },
   },
   methods: {

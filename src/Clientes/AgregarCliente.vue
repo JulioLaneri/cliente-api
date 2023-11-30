@@ -18,8 +18,8 @@
             </div>
   
             <div class="mb-3">
-              <label for="email" class="form-label">Email:</label>
-              <input type="email" v-model="email" class="form-control" />
+              <label for="correoElectronico" class="form-label">Correo:</label>
+              <input type="correoElectronico" v-model="correoElectronico" class="form-control" />
             </div>
   
             <div class="mb-3">
@@ -64,27 +64,22 @@
       return {
         nombre: '',
         cedula: '',
-        email: '',
+        correoElectronico: '',
         telefono: '',
         
-        deporte: 'futbol',
       };
     },
     methods: {
       async agregarCliente() {
         try {
-           await axios.post('http://localhost:8085/clientes', {
+           await axios.post('http://localhost:8081/clientes/save', {
             nombre: this.nombre,
             cedula: this.cedula,
-            email: this.email,
+            correoElectronico: this.correoElectronico,
             telefono: this.telefono,
             
-            deporteid: this.deporte,
           });
-  
-          
           this.cerrarModal(); // Cierra el modal al guardar correctamente
-  
         } catch (error) {
           console.error('Error al agregar empleado:', error);
         }
