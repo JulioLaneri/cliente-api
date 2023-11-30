@@ -52,6 +52,8 @@
     
   <script>
   import axios from 'axios';
+  import Swal from 'sweetalert2';
+
   
   export default {
     props: {
@@ -71,19 +73,34 @@
     },
     methods: {
       async agregarCliente() {
-        try {
-           await axios.post('http://localhost:8081/clientes/save', {
-            nombre: this.nombre,
-            cedula: this.cedula,
-            correoElectronico: this.correoElectronico,
-            telefono: this.telefono,
-            
-          });
-          this.cerrarModal(); // Cierra el modal al guardar correctamente
-        } catch (error) {
-          console.error('Error al agregar empleado:', error);
-        }
-      },
+    try {
+      await axios.post('http://localhost:8081/clientes/save', {
+        nombre: this.nombre,
+        cedula: this.cedula,
+        correoElectronico: this.correoElectronico,
+        telefono: this.telefono,
+      });
+
+      this.cerrarModal(); // Cierra el modal al guardar correctamente
+
+      // Muestra el mensaje de confirmación con SweetAlert
+      Swal.fire({
+        icon: 'success',
+        title: 'Cliente agregado con éxito',
+        showConfirmButton: false,
+        timer: 1500, // Cerrar automáticamente después de 1.5 segundos
+      });
+    } catch (error) {
+      console.error('Error al agregar empleado:', error);
+
+      // Muestra un mensaje de error con SweetAlert
+      Swal.fire({
+        icon: 'error',
+        title: 'Error al agregar cliente',
+        text: 'Ha ocurrido un error al intentar agregar el cliente. Por favor, inténtalo nuevamente.',
+      });
+    }
+  },
       cerrarModal() {
         // Puedes emitir un evento para que el componente padre maneje la visibilidad del modal
         this.$emit('cerrar');
