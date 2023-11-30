@@ -7,7 +7,7 @@
                 <div class="mb-3 row">
                     <div class="col-md-6">
                         <label for="cliente" class="form-label">Nombre del Cliente:</label>
-                        <select v-model="factura.nombreCliente" class="form-select">
+                        <select v-model="selectedCliente" @change="clienteSeleccionado" class="form-select">
                             <option v-for="cliente in clientes" :key="cliente.id" :value="cliente.id">{{ cliente.nombre }}
                             </option>
                         </select>
@@ -56,39 +56,54 @@ import HomePage from "@/components/HomePage.vue";
 export default {
     data() {
         return {
-            
             factura: {
+                nombreCliente: "",
                 rucCliente: "",
-                clienteid: 3,
-                total: 0,
+                clienteid: null,
+                total: "",
                 detalles: [
                     {
-                        precio: 0,
-
-                        suscripcionid: 1
+                        precio: ""
                     }
                 ]
             },
             clientes: [],
+            selectedCliente: null,
             mostrar: false,
         };
     },
     mounted() {
-        axios
-            .get("http://localhost:8081/clientes/page/0")
-            .then((response) => {
-                this.clientes = response.data;
-            })
-            .catch((error) => {
-                console.error("Error al obtener la lista de clientes", error);
-            });
+        this.obtenerClientes();
     },
     methods: {
+        async obtenerClientes() {
+            try {
+                const response = await axios.get('http://localhost:8081/clientes/page/0');
+                this.clientes = response.data.content;
+            } catch (error) {
+                console.error('Error al obtener la lista de clientes:', error);
+            }
+        },
+        async clienteSeleccionado() {
+            // Espera a que se obtengan los clientes antes de asignar automáticamente el nombre
+            await this.obtenerClientes();
+
+            // Encuentra el cliente seleccionado
+            const clienteSeleccionado = this.clientes.find(cliente => cliente.id === this.selectedCliente);
+
+            // Asigna automáticamente el nombre y el clienteid
+            if (clienteSeleccionado) {
+                this.factura.nombreCliente = clienteSeleccionado.nombre;
+                this.factura.clienteid = clienteSeleccionado.clienteId;
+            }
+        },
+
+
         mostrarModal() {
-      // Función para mostrar el modal cuando se hace clic en el botón
-      this.mostrar = true;
-    },
-        
+            // Función para mostrar el modal cuando se hace clic en el botón
+            this.mostrar = true;
+        },
+
         eliminarDetalle(index) {
             this.factura.detalles.splice(index, 1);
         },
@@ -97,7 +112,7 @@ export default {
                 console.log(this.factura)
                 const response = await axios.post('http://localhost:8081/factura-cliente/save', this.factura);
 
-                console.log('factura:', response.data);
+                console.log('factura:', response.data.content);
             } catch (error) {
                 console.error('Error en la solicitud:', error);
             }
@@ -113,7 +128,7 @@ export default {
     },
     components: {
         HomePage,
-        
+
     }
 };
 </script>
@@ -125,6 +140,4 @@ export default {
 .btn-primary {
     margin-left: 72rem;
 }
-
-
 </style>

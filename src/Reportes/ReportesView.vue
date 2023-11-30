@@ -158,7 +158,7 @@ export default {
 
 
                 const response = await axios.get(url);
-                this[this.selectedOption] = response.data;
+                this[this.selectedOption] = response.data.content;
 
                 // Solo actualizar totalItems si estamos obteniendo la lista de empleados
                 if (this.selectedOption === 'empleados') {

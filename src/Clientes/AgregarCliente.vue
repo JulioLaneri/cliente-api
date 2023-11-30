@@ -27,17 +27,7 @@
               <input type="text" v-model="telefono" class="form-control" />
             </div>
   
-            
-  
-            <div class="mb-3">
-              <label for="deporte" class="form-label">Deporte:</label>
-              <select v-model="deporte" class="form-select">
-                <option value="futbol">Fútbol</option>
-                <option value="tenis">Tenis</option>
-                <option value="padel">Padel</option>
-              </select>
-            </div>
-  
+      
   
             <button type="submit" class="btn btn-primary">Agregar</button>
             <button @click="cerrarModal" class="btn btn-secondary close-button" aria-label="Close">
@@ -79,6 +69,7 @@
             telefono: this.telefono,
             
           });
+          console.log("Cliente agregado");
           this.cerrarModal(); // Cierra el modal al guardar correctamente
         } catch (error) {
           console.error('Error al agregar empleado:', error);

@@ -1,12 +1,12 @@
 <template>
-    <div class="modal-background">
-      <div class="modal-container">
-        <div class="modal-content">
-  
-          <h2 class="mb-4">Editar Empleado</h2>
-  
-          <form @submit.prevent="editarEmpleado">
-            <div class="mb-3" >
+  <div class="modal-background">
+    <div class="modal-container">
+      <div class="modal-content">
+
+        <h2 class="mb-4">Editar Empleado</h2>
+
+        <form @submit.prevent="editarEmpleado">
+          <div class="mb-3">
             <label for="nombre" class="form-label">Nombre:</label>
             <input type="text" v-model="nombre" class="form-control" />
           </div>
@@ -26,7 +26,7 @@
             <input type="text" v-model="telefono" class="form-control" />
           </div>
 
-          
+
 
           <div class="mb-3">
             <label for="deporte" class="form-label">Deporte:</label>
@@ -44,12 +44,12 @@
           </button>
 
         </form>
-        </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
   
-  <script>
+<script>
 import axios from 'axios';
 
 export default {
@@ -65,47 +65,28 @@ export default {
   },
   data() {
     return {
-      // Inicializamos los datos del formulario en el gancho watch
       nombre: '',
       cedula: '',
       email: '',
       telefono: '',
-      deporte: 'futbol',
+      
     };
-  },
-  watch: {
-    // Utilizamos el gancho watch para actualizar los datos cuando cambia empleadoEditar
-    empleadoEditar: {
-      immediate: true, // Para ejecutar la función watch inmediatamente
-      handler(empleado) {
-        console.log('Empleado en watch:', empleado);
-        if (empleado) {
-        this.nombre = empleado.nombre || '';
-        this.cedula = empleado.cedula || '';
-        this.email = empleado.email || '';
-        this.telefono = empleado.telefono || '';
-        
-        this.deporte = empleado.deporte || 'futbol';
-      }
-    },
-    },
   },
   methods: {
     async editarEmpleado() {
-        
       try {
-        console.log('Datos a enviar para editar:');
+
         const response = await axios.put(`http://localhost:8085/empleados/${this.empleadoEditar.empleadoID}`, {
           nombre: this.nombre,
           cedula: this.cedula,
           email: this.email,
           telefono: this.telefono,
           
-          deporteid: this.deporte,
         });
-        
+
         console.log('Empleado editado:', response.data);
-        this.cerrarModal(); // Cierra el modal al guardar correctamente
+        this.cerrarModal();
+
       } catch (error) {
         console.error('Error al editar empleado:', error);
       }
@@ -114,11 +95,27 @@ export default {
       this.$emit('cerrar');
     },
   },
+  watch: {
+    empleadoEditar: {
+      immediate: true,
+      handler(empleado) {
+        console.log('Empleado en watch:', empleado);
+        if (empleado) {
+          this.nombre = empleado.nombre || '';
+          this.cedula = empleado.cedula || '';
+          this.email = empleado.email || '';
+          this.telefono = empleado.telefono || '';
+          
+        }
+      },
+    },
+  },
 };
 </script>
 
-  <style scoped>
-  .modal-background {
+
+<style scoped>
+.modal-background {
   position: fixed;
   top: 0;
   left: 0;
@@ -157,11 +154,12 @@ export default {
   color: #333;
   /* Color del botón de cierre */
 }
+
 .form-label {
   margin-right: 20rem;
   margin-bottom: 0.5rem;
   display: inline-block;
- 
-  
+
+
 }
-  </style>
+</style>

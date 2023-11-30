@@ -2,11 +2,7 @@
   <div>
     <HomePage />
 
-    <button
-      @click="mostrarModalAgregar = true"
-      type="button"
-      class="btn btn-primary float-end"
-    >
+    <button @click="mostrarModalAgregar = true" type="button" class="btn btn-primary float-end">
       Agregar Cliente
     </button>
     <!-- Modal Agregar -->
@@ -17,12 +13,7 @@
     <h2>Lista de Clientes</h2>
     <!--Busqueda-->
     <div class="d-flex justify-content-center mb-3">
-      <input
-        v-model="searchTerm"
-        class="form-control"
-        type="text"
-        placeholder="Buscar cliente"
-      />
+      <input v-model="searchTerm" class="form-control" type="text" placeholder="Buscar cliente" />
       <div class="input-group-append">
         <span class="input-group-text">
           <!-- Puedes cambiar "fas fa-search" según el icono que prefieras de Font Awesome -->
@@ -40,43 +31,77 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="cliente in filteredClientes" :key="cliente.clienteID">
+        <tr v-for="cliente in filteredClientes" :key="cliente.clienteId">
           <td>{{ cliente.nombre }}</td>
           <td>{{ cliente.cedula }}</td>
           <td>{{ cliente.correoElectronico }}</td>
 
           <td>
             {{ cliente.telefono }}
-            <button
-              type="button"
-              @click="confirmarEliminar(cliente)"
-              class="btn btn-danger float-end"
-            >
+            <button type="button" @click="confirmarEliminar(cliente)" class="btn btn-danger float-end">
               Eliminar
             </button>
 
-            <button
-              @click="
-                mostrarModalEditar = true;
-                clienteSeleccionado = cliente;
-              "
-              class="btn btn-warning float-end"
-            >
+            <button @click="
+              mostrarModalEditar = true;
+            clienteSeleccionado = cliente;
+            " class="btn btn-warning float-end">
               Editar
             </button>
 
             <!-- Modal Editar -->
             <div v-if="mostrarModalEditar" class="modal">
-              <EditarCliente
-                :mostrar="mostrarModalEditar"
-                :clienteEditar="clienteSeleccionado"
-                @cerrar="cerrarModalEditar"
-              />
+              <EditarCliente :mostrar="mostrarModalEditar" :clienteEditar="clienteSeleccionado"
+                @cerrar="cerrarModalEditar" />
             </div>
           </td>
         </tr>
       </tbody>
     </table>
+    <!-- Botones de paginación -->
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+        <li class="page-item" :class="{ disabled: currentPage === 1 }">
+          <button
+            class="page-link"
+            @click="currentPage > 1 ? currentPage-- : null"
+            aria-label="Previous"
+          >
+            <span aria-hidden="true">&laquo;</span>
+          </button>
+        </li>
+
+        <li
+          class="page-item"
+          v-for="page in Math.ceil(totalItems / pageSize)"
+          :key="page"
+          :class="{ active: page === currentPage }"
+        >
+          <button class="page-link" @click="currentPage = page">
+            {{ page }}
+          </button>
+        </li>
+
+        <li
+          class="page-item"
+          :class="{
+            disabled: currentPage === Math.ceil(totalItems / pageSize),
+          }"
+        >
+          <button
+            class="page-link"
+            @click="
+              currentPage < Math.ceil(totalItems / pageSize)
+                ? currentPage++
+                : null
+            "
+            aria-label="Next"
+          >
+            <span aria-hidden="true">&raquo;</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 
@@ -97,17 +122,31 @@ export default {
       mostrarModalEditar: false,
       clienteSeleccionado: null,
       searchTerm: "",
-      cargando: false, // Agregado
+      cargando: false, 
+      currentPage: 1,
+      pageSize: 5,
+      totalItems: 0,
     };
+  },
+
+  watch: {
+    currentPage: "obtenerClientes",
   },
   methods: {
     async obtenerClientes() {
       try {
         this.cargando = true;
         const response = await axios.get(
-          "http://localhost:8081/clientes/page/0"
+          `http://localhost:8081/clientes/page/${this.currentPage - 1}?size=${
+            this.pageSize
+          }`
         );
-        this.clientes = response.data;
+        this.clientes = response.data.content;
+        this.totalItems = response.data.totalElements;
+        // Nuevo: Filtrar empleados según el término de búsqueda
+        this.filteredClientes = this.clientes.filter((cliente) =>
+          cliente.nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
+        );
       } catch (error) {
         console.error("Error al obtener los datos de los clientes:", error);
         if (error.response && error.response.status === 404) {
@@ -170,14 +209,14 @@ export default {
   },
   computed: {
     //  propiedad computada para los clientes filtrados
+
     filteredClientes() {
-      if (this.clientes) {
-        return this.clientes.filter((cliente) =>
-          cliente.nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
-        );
-      } else {
-        return [];
-      }
+
+      return this.clientes.filter((cliente) =>
+        cliente.nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+
+
     },
   },
 };
