@@ -1,22 +1,23 @@
 <template>
-    <div>
-        <HomePage />
-        <div class="container mt-5">
+    <HomePage />
+    <div class="borde">
+        <div class="container mt-5 ">
             <h2 class="mb-4">Crear Nueva Factura</h2>
             <form @submit.prevent="guardarFactura">
-                <div class="mb-3 text-center">
-                    <label for="cliente" class="form-label">Nombre del Cliente:</label>
-                    <select v-model="factura.nombreCliente" class="form-select">
-                        <option v-for="cliente in clientes" :key="cliente.id" :value="cliente.id">{{ cliente.nombre }}
-                        </option>
-                    </select>
-                </div>
+                <div class="mb-3 row">
+                    <div class="col-md-6">
+                        <label for="cliente" class="form-label">Nombre del Cliente:</label>
+                        <select v-model="factura.nombreCliente" class="form-select">
+                            <option v-for="cliente in clientes" :key="cliente.id" :value="cliente.id">{{ cliente.nombre }}
+                            </option>
+                        </select>
+                    </div>
 
-                <div class="mb-3 text-center">
-                    <label for="rucCliente" class="form-label">Número de RUC:</label>
-                    <input v-model="factura.rucCliente" type="text" class="form-control" id="rucCliente" required />
+                    <div class="col-md-6">
+                        <label for="rucCliente" class="form-label">Número de RUC:</label>
+                        <input v-model="factura.rucCliente" type="text" class="form-control" id="rucCliente" required />
+                    </div>
                 </div>
-
                 <h3>Detalles:</h3>
 
                 <div v-for="(detalles, index) in factura.detalles" :key="index" class="mb-3 row">
@@ -36,9 +37,9 @@
                         </div>
                     </div>-->
                     <div class="mb-3">
-                    <label for="total" class="form-label">Total:</label>
-                    <input v-model.number="factura.total" type="number" class="form-control" id="total" required />
-                </div>
+                        <label for="total" class="form-label">Total:</label>
+                        <input v-model.number="factura.total" type="number" class="form-control" id="total" required />
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-success float-end">Crear Factura</button>
@@ -51,9 +52,11 @@
 import axios from "axios";
 import HomePage from "@/components/HomePage.vue";
 
+
 export default {
     data() {
         return {
+            
             factura: {
                 rucCliente: "",
                 clienteid: 3,
@@ -61,12 +64,13 @@ export default {
                 detalles: [
                     {
                         precio: 0,
-                        
+
                         suscripcionid: 1
                     }
                 ]
             },
-            clientes: []
+            clientes: [],
+            mostrar: false,
         };
     },
     mounted() {
@@ -80,6 +84,10 @@ export default {
             });
     },
     methods: {
+        mostrarModal() {
+      // Función para mostrar el modal cuando se hace clic en el botón
+      this.mostrar = true;
+    },
         
         eliminarDetalle(index) {
             this.factura.detalles.splice(index, 1);
@@ -104,13 +112,19 @@ export default {
         }
     },
     components: {
-        HomePage
+        HomePage,
+        
     }
 };
 </script>
-<style>
-#id{
-    width: 100%
+<style >
+.borde {
+    margin-top: 7rem;
 }
+
+.btn-primary {
+    margin-left: 72rem;
+}
+
 
 </style>

@@ -22,7 +22,10 @@
             <router-link to="/reportes" class="nav-link">Reportes</router-link>
           </li>
           <li class="nav-item px-lg-5">
-            <router-link to="/facturacion" class="nav-link">Facturacion</router-link>
+            <router-link to="/facturacion" class="nav-link">Crear Facturacion</router-link>
+          </li>
+          <li class="nav-item px-lg-5">
+            <router-link to="/historial" class="nav-link"> Historial Facturacion</router-link>
           </li>
         </ul>
         
